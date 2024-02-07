@@ -13,21 +13,21 @@ namespace VilniusCodingCSharp
         public static void Root()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            //Task1();
-            //Task2();
-            //Task3();
-            //Task4();
-            //Task5();
-            //Task6();
-            //Task7();
-            //Task8();
-            //Task9();
-            //Task10();
-            //Task1Extra();
-            //Task2Extra();
-            //Task3Extra();
-            //Task4Extra();
-            //Task5Extra();
+            Task1();
+            Task2();
+            Task3();
+            Task4();
+            Task5();
+            Task6();
+            Task7();
+            Task8();
+            Task9();
+            Task10();
+            Task1Extra();
+            Task2Extra();
+            Task3Extra();
+            Task4Extra();
+            Task5Extra();
             Task6Extra();
             Task7Extra();
             Task8Extra();
