@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VilniusCodingCSharp", "VilniusCodingDay1\VilniusCodingCSharp.csproj", "{4A49D142-CD1E-4390-B938-4FF9541987A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VilniusCodingCSharp", "VilniusCodingCSharp\VilniusCodingCSharp.csproj", "{4A49D142-CD1E-4390-B938-4FF9541987A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
