@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VilniusCodingCSharp;
 
 namespace VilniusCodingDay1
 {
@@ -11,7 +12,6 @@ namespace VilniusCodingDay1
 
         public static void Root()
         {
-            Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             Task1();
             Task2();
@@ -25,18 +25,8 @@ namespace VilniusCodingDay1
             Task10();
             Console.WriteLine();
         }
-        public static void ToggleHighlight()
-        {
-            Console.ForegroundColor = Console.ForegroundColor == ConsoleColor.White ? ConsoleColor.Red : ConsoleColor.White;
-        }
-        public static void TaskDisplay(int taskNr, string answer)
-        {
-            ToggleHighlight();
-            Console.WriteLine($"Task{taskNr}");
-            ToggleHighlight();
-            Console.WriteLine(answer);
-        }
-        public static void Task1()
+
+        private static void Task1()
         {
             string firstName = "Žilvinas";
             string lastName = "Kančys";
@@ -52,9 +42,9 @@ namespace VilniusCodingDay1
                 currentDate: {currentDate}
                 age: {age}
                 """;
-            TaskDisplay(1, answer);
+            MyUtils.TaskDisplay(1, answer);
         }
-        public static void Task2()
+        private static void Task2()
         {
             Random rng = new Random();
             int min = 0, max = 5;
@@ -89,9 +79,9 @@ namespace VilniusCodingDay1
                 num2: {num2}
                 answer: {safeAnswer}
                 """;
-            TaskDisplay(2, answer);
+            MyUtils.TaskDisplay(2, answer);
         }
-        public static void Task3()
+        private static void Task3()
         {
             Random rng = new Random();
             int min = 0, max = 26;
@@ -114,9 +104,9 @@ namespace VilniusCodingDay1
                 num3: {num3}
                 midValue: {ans}
                 """;
-            TaskDisplay(3, answer);
+            MyUtils.TaskDisplay(3, answer);
         }
-        public static void Task4()
+        private static void Task4()
         {
             Random rng = new Random();
             int min = 1, max = 11;
@@ -134,9 +124,9 @@ namespace VilniusCodingDay1
                 c: {c}
                 can it be triangle?: {ans} 
                 """;
-            TaskDisplay(4, answer);
+            MyUtils.TaskDisplay(4, answer);
         }
-        public static void Task5()
+        private static void Task5()
         {
             Random rng = new Random();
             int min = 0, max = 3;
@@ -173,9 +163,9 @@ namespace VilniusCodingDay1
                 count1: {c1}
                 count2: {c2}
                 """;
-            TaskDisplay(5, answer);
+            MyUtils.TaskDisplay(5, answer);
         }
-        public static void Task6()
+        private static void Task6()
         {
             Random rng = new Random();
             int min = 0, max = 26;
@@ -276,9 +266,9 @@ namespace VilniusCodingDay1
                 answer: {ans}
                 """;
 
-            TaskDisplay(6, answer);
+            MyUtils.TaskDisplay(6, answer);
         }
-        public static void Task7()
+        private static void Task7()
         {
             Random rng = new Random();
             int min = 5, max = 3001;
@@ -306,9 +296,9 @@ namespace VilniusCodingDay1
                 discount: {discount}%
                 total cost: {totalCost} Eur
                 """;
-            TaskDisplay(7, answer);
+            MyUtils.TaskDisplay(7, answer);
         }
-        public static void Task8()
+        private static void Task8()
         {
             Random rng = new Random();
             int min = 0, max = 101;
@@ -341,9 +331,9 @@ namespace VilniusCodingDay1
                 average: {average}
                 (10;90) average: {changedAverage}
                 """;
-            TaskDisplay(8, answer);
+            MyUtils.TaskDisplay(8, answer);
         }
-        public static void Task9()
+        private static void Task9()
         {
             Random rng = new Random();
 
@@ -378,9 +368,9 @@ namespace VilniusCodingDay1
                 extra seconds: {extraSecond}
                 second gen: {newHour}:{newMinuteConverted}:{newSecondConverted}
                 """;
-            TaskDisplay(9, answer);
+            MyUtils.TaskDisplay(9, answer);
         }
-        public static void Task10()
+        private static void Task10()
         {
             var rng = new Random();
             int min = 1000, max = 10000;
@@ -543,7 +533,7 @@ namespace VilniusCodingDay1
                 num6: {num6}
                 ordered: [{pos1},{pos2},{pos3},{pos4},{pos5},{pos6}]
                 """;
-            TaskDisplay(10, answer);
+            MyUtils.TaskDisplay(10, answer);
         }
     }
 }

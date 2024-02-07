@@ -9,6 +9,7 @@ namespace VilniusCodingDay1
         {
             //Day1.Root();
             //Day2.Root();
+            Day3.Root();
         }
     }
 }
