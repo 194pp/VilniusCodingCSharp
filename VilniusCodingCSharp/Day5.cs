@@ -22,6 +22,7 @@ public class Day5
         Task4Extra();
         Task5Extra();
         Task8Extra();
+        Task9Extra();
         Console.WriteLine();
     }
     private static Random rng = new Random();
@@ -356,5 +357,68 @@ public class Day5
             numsWithLastPrimes: {MyUtils.StringArrayJoin(numsWithLastPrimes)}
             """;
         MyUtils.TaskDisplay("8Extra", answer);
+    }
+    private static int[] Task9ExtraFindSmallestNumberDimensions(int[][] arr)
+    {
+        int value = Int32.MaxValue;
+        int[] dimensions = [];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            for (int j = 0; j < arr[i].Length; j++)
+            {
+                if (arr[i][j] < value)
+                {
+                    //arr[i][j] = arr[i][j] + 3;
+                    value = arr[i][j];
+                    dimensions = [i, j];
+                }
+            }
+        }
+        return dimensions;
+    }
+    private static int Task9ExtraFindPrimesAverage(int[][] arr)
+    {
+        int primeSum = 0;
+        int primeCount = 0;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            for (int j = 0; j < arr[i].Length; j++)
+            {
+                if (MyUtils.IsPrimeNumber(arr[i][j]))
+                {
+                    primeCount++;
+                    primeSum += arr[i][j];
+                }
+            }
+        }
+        if (primeCount == 0) return 0;
+        return primeSum / primeCount;
+    }
+    private static void Task9Extra()
+    {
+        int[][] jaggedNumsArr = new int[10][];
+        jaggedNumsArr = jaggedNumsArr.Select((x) => new int[10].PopulateWithRandomInts(1, 101)).ToArray();
+        int iterationCount = 0;
+        int avg = 0;
+
+        while (true)
+        {
+            avg = Task9ExtraFindPrimesAverage(jaggedNumsArr);
+            if (avg < 70)
+            {
+                int[] dims = Task9ExtraFindSmallestNumberDimensions(jaggedNumsArr);
+                jaggedNumsArr[dims[0]][dims[1]] += 3;
+                iterationCount++;
+            }
+            else break;
+        }
+
+        string answer = $"""
+            iterationCount:     {iterationCount}
+            finalPrimeAverage:  {avg}
+            numsMatrix:         {MyUtils.StringJagged2DArrayJoin(jaggedNumsArr)} 
+            """;
+
+        MyUtils.TaskDisplay("9Extra", answer);
     }
 }

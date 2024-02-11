@@ -1,4 +1,6 @@
-﻿namespace VilniusCodingCSharp;
+﻿using System.Text;
+
+namespace VilniusCodingCSharp;
 public static class MyUtils
 {
     public static void ToggleHighlight()
@@ -53,5 +55,15 @@ public static class MyUtils
         Random r = new Random();
         for (int i = 0; i < arr.Length; i++) arr[i] = r.Next(start, end);
         return arr;
+    }
+    public static string StringJagged2DArrayJoin(int[][] arr)
+    {
+        StringBuilder sb = new("[");
+        for (int i = 0; i < arr.Length; i++)
+        {
+            sb.Append($"[{String.Join(", ", arr[i])}],");
+        }
+        sb[sb.Length - 1] = ']';
+        return sb.ToString();
     }
 }
