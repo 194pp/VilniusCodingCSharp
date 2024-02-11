@@ -1,7 +1,4 @@
-﻿using System.Reflection.Metadata;
-using VilniusCodingCSharp;
-
-namespace VilniusCodingDay1
+﻿namespace VilniusCodingCSharp
 {
     internal class Program
     {
@@ -9,7 +6,9 @@ namespace VilniusCodingDay1
         {
             //Day1.Root();
             //Day2.Root();
-            Day3.Root();
+            //Day3.Root();
+            //Day4.Root();
+            Day5.Root();
         }
     }
 }
