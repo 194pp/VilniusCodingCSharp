@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace VilniusCodingCSharp.Day7;
 public static class Day7
 {
+
     public static void Root()
+    {
+        //BooksAndPlants();
+        GamesTask();
+    }
+    private static void BooksAndPlants()
     {
         List<Book> books = new List<Book>();
         books.Add(new Book());
@@ -59,5 +66,261 @@ public static class Day7
             {MyUtils.StringArrayJoin(plantsStrings)}
             """;
         MyUtils.TaskDisplay("Books", answer);
+    }
+    private static string[] gameActions = ["Show games list", "Add new game", "Edit a game", "Delete a game", "Exit"];
+    private static int hudWidth = 60;
+    private static string whitespaces = String.Join("", new char[hudWidth].Populate(' '));
+    private static string horizontalBorderDouble = String.Join("", new char[hudWidth].Populate('═'));
+    private static string header = "Games Task".PadBoth(hudWidth);
+    private static bool crudActive = false;
+    private static bool inputActive = false;
+    private static string nameInput = "";
+    private static string releaseYearInput = "";
+    private static string typeInput = "";
+    private static string runsOnInput = "";
+    private static int selectedActionStage1 = 0;
+    private static void InputsHandler(char ch)
+    {
+        switch (selectedActionStage1)
+        {
+            case 0:
+                nameInput += ch;
+                break;
+            case 1:
+                releaseYearInput += ch;
+                break;
+            case 2:
+                typeInput += ch;
+                break;
+            case 3:
+                runsOnInput += ch;
+                break;
+            default:
+                break;
+        }
+    }
+    private static void PrintSubHeader(string subHeader)
+    {
+        Console.Write("║ ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write($"{subHeader}: ".PadRight(hudWidth));
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(" ║" + Environment.NewLine);
+    }
+    private static void PrintRow(string str)
+    {
+        Console.Write("║ ");
+        Console.Write(str.PadRight(hudWidth));
+        Console.Write(" ║" + Environment.NewLine);
+    }
+    private static void PrintRowHighlighted(string str, ConsoleColor color = ConsoleColor.Green)
+    {
+        Console.Write("║ ");
+        Console.ForegroundColor = color;
+        Console.Write(str.PadRight(hudWidth));
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(" ║" + Environment.NewLine);
+    }
+    private static void GamesTaskShowHud(int selectedAction)
+    {
+        Console.Clear();
+        string instructions = "(w/s to navigate, Enter to select)".PadBoth(hudWidth);
+        Console.WriteLine($"""
+            ╔═{horizontalBorderDouble}═╗
+            ║ {header} ║
+            ║ {instructions} ║
+            ║ {whitespaces} ║
+            """);
+        for (int i = 0; i < gameActions.Length; i++)
+        {
+            Console.Write("║ ");
+            if (i == selectedAction)
+                Console.ForegroundColor = ConsoleColor.Red;
+            string selection = $"{i + 1}: {gameActions[i]}".PadRight(hudWidth);
+            Console.Write(selection);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($" ║{Environment.NewLine}");
+
+        }
+        Console.WriteLine($"╚═{horizontalBorderDouble}═╝");
+    }
+    private static void GamesTaskShowHud(int selectedAction, bool confirmed, List<Game> gamelist)
+    {
+        Console.Clear();
+        Console.WriteLine($"""
+            ╔═{horizontalBorderDouble}═╗
+            ║ {header} ║
+            ║ {whitespaces} ║
+            ║ {whitespaces} ║
+            """);
+        for (int i = 0; i < gameActions.Length; i++)
+        {
+            Console.Write("║ ");
+            if (i == selectedAction)
+                Console.ForegroundColor = ConsoleColor.Green;
+            else
+                Console.ForegroundColor = ConsoleColor.Gray;
+            string selection = $"{i + 1}: {gameActions[i]}".PadRight(hudWidth);
+            Console.Write(selection);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($" ║{Environment.NewLine}");
+
+        }
+        Console.WriteLine($"╟─{String.Join("", new char[hudWidth].Populate('─'))}─╢");
+
+        switch (selectedAction)
+        {
+            case 0:
+                GamesTaskGetStyledGameList(gamelist);
+                break;
+            case 1:
+                GamesTaskCreatePseudoForm();
+                break;
+            default:
+                break;
+        }
+    }
+    private static void GamesTaskGetStyledGameList(List<Game> games)
+    {
+        PrintSubHeader("Games");
+        for (int i = 0; i < games.Count; i++)
+        {
+            PrintRow($"{i + 1}. {games[i].Title}. ({games[i].ReleaseYear})");
+            PrintRow($"   - genre: {games[i].Type}.");
+            PrintRow($"   - runs on: {MyUtils.StringArrayJoin(games[i].RunsOn)}.");
+
+        }
+        Console.WriteLine($"╚═{horizontalBorderDouble}═╝");
+    }
+    private static void GamesTaskCreatePseudoForm()
+    {
+        string[] arrow = new string[6].Select((x, y) => y == selectedActionStage1 ? ">" : " ").ToArray();
+        PrintSubHeader("Create a game");
+        PrintRow($"{arrow[0]} Name: {nameInput}");
+        PrintRow($"{arrow[1]} Release year: {releaseYearInput}");
+        PrintRow($"{arrow[2]} Type: {typeInput}");
+        PrintRow($"{arrow[3]} Runs on: {runsOnInput}");
+        PrintRow($"{arrow[4]} Clear");
+        PrintRow($"{arrow[5]} Confirm");
+        PrintRow($"sa1: {selectedActionStage1}");
+        Console.WriteLine($"╚═{horizontalBorderDouble}═╝");
+    }
+    private static void GamesTask()
+    {
+        List<Game> games = new List<Game>();
+        games.Add(new Game("RuneScape", "MMORPG", 2001, ["PC"]));
+        games.Add(new Game("LeagueOfLegends", "MOBA", 2009, ["PC"]));
+
+        int selectedAction = 0;
+
+        int formStage = 0;
+
+        // IO loop
+        while (true)
+        {
+            switch (formStage)
+            {
+                case 0:
+                    GamesTaskShowHud(selectedAction);
+                    break;
+                case 1:
+                    GamesTaskShowHud(selectedAction, true, games);
+                    break;
+                default:
+                    break;
+            }
+
+            char key = Console.ReadKey().KeyChar;
+            char keyUpper = $"{key}".ToUpper()[0];
+            if (!crudActive)
+            {   // top-level menu navigation
+                switch (keyUpper)
+                {
+                    case 'W':
+                        if (formStage == 0)
+                        {
+                            if (selectedAction < 1) selectedAction = gameActions.Length - 1;
+                            else selectedAction--;
+                        }
+                        else if (formStage == 1)
+                        {
+                            if (selectedAction == 1)
+                            {
+                                if (selectedActionStage1 < 1) selectedActionStage1 = 5;
+                                else selectedActionStage1--;
+                            }
+                        }
+                        break;
+                    case 'S':
+                        if (formStage == 0)
+                        {
+                            if (selectedAction >= gameActions.Length - 1) selectedAction = 0;
+                            else selectedAction++;
+                        }
+                        else if (formStage == 1)
+                        {
+                            if (selectedAction == 1)
+                            {
+                                if (selectedActionStage1 >= 5) selectedActionStage1 = 0;
+                                else selectedActionStage1++;
+                            }
+                        }
+                        break;
+                    case (char)27:
+                        if (formStage == 0)
+                        {
+                            Environment.Exit(0);
+                        }
+                        else if (formStage == 1)
+                        {
+                            formStage = 0;
+                            Thread.Sleep(1);
+                        }
+                        break;
+                    case (char)13: // enter
+                        if (formStage == 0)
+                        {
+                            formStage = 1;
+                        }
+                        else if (formStage == 1)
+                        {
+                            if (selectedAction == 1)
+                            {
+                                crudActive = true;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (formStage < 1) continue;
+            switch (key)
+            {
+                case (char)27:
+                    formStage = 0;
+                    break;
+                case (char)13:
+                    if (selectedAction == 1)
+                    {
+                        if (selectedActionStage1 == 4)
+                        {
+                            Game newGame = new Game(nameInput, typeInput, int.Parse(releaseYearInput), runsOnInput.Split(","));
+                            games.Add(newGame);
+                            formStage = 0;
+                            selectedAction = 0;
+                            nameInput = "";
+                            releaseYearInput = "";
+                            typeInput = "";
+                            runsOnInput = "";
+                        }
+                    }
+                    break;
+                default:
+
+                    InputsHandler(key);
+                    break;
+            }
+        }
     }
 }
