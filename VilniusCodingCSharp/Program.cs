@@ -1,4 +1,6 @@
-﻿namespace VilniusCodingCSharp
+﻿using VilniusCodingCSharp.Day7;
+
+namespace VilniusCodingCSharp
 {
     internal class Program
     {
@@ -7,8 +9,9 @@
             //Day1.Root();
             //Day2.Root();
             //Day3.Root();
-            Day4.Root();
+            //Day4.Root();
             //Day5.Root();
+            Day7.Day7.Root();
         }
     }
 }

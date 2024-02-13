@@ -6,11 +6,15 @@ public static class MyUtils
     {
         Console.ForegroundColor = Console.ForegroundColor == ConsoleColor.White ? ConsoleColor.Red : ConsoleColor.White;
     }
+    public static void ToggleHighlight(bool isRed)
+    {
+        Console.ForegroundColor = isRed ? ConsoleColor.Red : ConsoleColor.White;
+    }
     public static void TaskDisplay(string taskText, string answer)
     {
-        ToggleHighlight();
+        ToggleHighlight(true);
         Console.WriteLine($"Task{taskText}");
-        ToggleHighlight();
+        ToggleHighlight(false);
         if (answer.Length > 0)
             Console.WriteLine(answer);
     }
