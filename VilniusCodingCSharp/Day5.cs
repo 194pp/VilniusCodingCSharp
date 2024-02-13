@@ -1,5 +1,4 @@
-﻿using System.Linq;
-namespace VilniusCodingCSharp;
+﻿namespace VilniusCodingCSharp;
 public class Day5
 {
     public static void Root()

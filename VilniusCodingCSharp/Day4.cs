@@ -22,6 +22,12 @@ public class Day4
         //Task10();
         Task1Php();
         Task2Php();
+        Task3Php();
+        Task4Php();
+        Task5Php();
+        Task6Php(); // Dependency: Task5Php
+        Task7Php(); // Dependency: Task5Php
+        Task8Php();
     }
     private static Random rng = new Random();
     private static int[] numsForTask1 = new int[30];
@@ -402,7 +408,168 @@ public class Day4
                 """;
         MyUtils.TaskDisplay("2Php", answer);
     }
+    private static string[] Task3PhpGenerateRandomLetterArray(int length)
+    {
+        if (length < 1) return [];
+        int min = 65;
+        int max = 90;
+        string[] charArr = new string[length];
+        for (int i = 0; i < length; i++)
+        {
+            charArr[i] = $"{(char)rng.Next(min, max + 1)}";
+        }
+        return charArr;
+    }
+    private static string[][] Task3PhpSortLetterStrings(string[][] arr)
+    {
+        string[][] arrCopy = [.. arr];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            arrCopy[i] = [.. arrCopy[i].OrderBy((x) => x)];
+        }
+        return arrCopy;
+    }
+    private static string[][] jaggedArr = new string[10][];
     private static void Task3Php()
+    {
+        for (int i = 0; i < jaggedArr.Length; i++)
+        {
+            jaggedArr[i] = Task3PhpGenerateRandomLetterArray(rng.Next(2, 21));
+        }
+        string jaggedArrBeforeSort = MyUtils.StringJagged2DArrayJoin(jaggedArr);
+        string[][] jaggedSortedArr = Task3PhpSortLetterStrings(jaggedArr);
+        string jaggedArrAfterSort = MyUtils.StringJagged2DArrayJoin(jaggedSortedArr);
+        string answer = $"""
+            jaggedArrBeforeSort: {jaggedArrBeforeSort}
+            jaggedArrAfterSort:  {jaggedArrAfterSort}
+            """;
+        MyUtils.TaskDisplay("3Php", answer);
+    }
+    private static void Task4Php()
+    {
+        jaggedArr = jaggedArr.OrderBy(x => x.Length).ToArray();
+        string answer = $"""
+            sortedRootArray: {MyUtils.StringJagged2DArrayJoin(jaggedArr)}
+            """;
+        MyUtils.TaskDisplay("4Php", answer);
+    }
+    private static (int user_id, int place_in_row)[] tupleArr = new (int, int)[30];
+    private static string Task5PhpPrintTupleArr((int user_id, int place_in_row)[] tupleArr)
+    {
+        string ans = "[";
+        for (int i = 0; i < tupleArr.Length; i++)
+        {
+            ans += "{";
+            ans += $"user_id: {tupleArr[i].user_id}, place_in_row: {tupleArr[i].place_in_row}";
+            ans += "}";
+            if (i == tupleArr.Length - 1) ans += "]";
+            else ans += $",{Environment.NewLine}";
+        }
+        return ans;
+    }
+    private static (int user_id, int place_in_row)[] Task5PhpMapTupleForTask((int user_id, int place_in_row)[] tupleArr)
+    {
+        (int user_id, int place_in_row)[] arr = [.. tupleArr];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            while (true)
+            {
+                int userId = rng.Next(1, 1000001);
+                if (arr.Length > 0 && arr.Where(x => x.user_id == userId).ToArray().Length > 0) continue;
+                int placeInRow = rng.Next(0, 101);
+                arr[i] = (userId, placeInRow);
+                break;
+            }
+        }
+        return arr;
+    }
+    private static void Task5Php()
+    {
+        tupleArr = Task5PhpMapTupleForTask(tupleArr);
+        string ans = Task5PhpPrintTupleArr(tupleArr);
+        string answer = $"""
+            tupleArray:
+            {ans}
+            """;
+        MyUtils.TaskDisplay("5Php", answer);
+    }
+    private static void Task6Php()
+    {
+        string stringTupleArrSortedByUserId = Task5PhpPrintTupleArr([.. tupleArr.OrderBy((x) => x.user_id)]);
+        string stringTupleArrSortedByPlaceInRow = Task5PhpPrintTupleArr([.. tupleArr.OrderBy((x) => x.place_in_row)]);
+
+        string answer = $"""
+            sortedByUserId:
+            {stringTupleArrSortedByUserId}
+            sortedByPlaceInRow:
+            {stringTupleArrSortedByPlaceInRow}
+            """;
+        MyUtils.TaskDisplay("6Php", answer);
+    }
+    private static string Task7PhpPrintBetterTupleArr((int user_id, int place_in_row, string name, string surname)[] betterTupleArr)
+    {
+        string ans = "[";
+        for (int i = 0; i < tupleArr.Length; i++)
+        {
+            ans += "{";
+            ans += $"user_id: {betterTupleArr[i].user_id}, " +
+                $"place_in_row: {betterTupleArr[i].place_in_row}, " +
+                $"name: {betterTupleArr[i].name}, " +
+                $"surname: {betterTupleArr[i].surname}";
+            ans += "}";
+            if (i == tupleArr.Length - 1) ans += "]";
+            else ans += $",{Environment.NewLine}";
+        }
+        return ans;
+    }
+    private static void Task7Php()
+    {
+        (int user_id, int place_in_row, string name, string surname)[] betterTuple = new (int user_id, int place_in_row, string name, string surname)[tupleArr.Length];
+        for (int i = 0; i < betterTuple.Length; i++)
+        {
+            string generatedName = Task3PhpGenerateRandomLetterArray(rng.Next(5, 16)).Aggregate((x, y) => x + y);
+            string generatedSurname = Task3PhpGenerateRandomLetterArray(rng.Next(5, 16)).Aggregate((x, y) => x + y);
+            generatedName = $"{generatedName[0]}{generatedName.Substring(1).ToLower()}";
+            generatedSurname = $"{generatedSurname[0]}{generatedSurname.Substring(1).ToLower()}";
+            betterTuple[i] = (user_id: tupleArr[i].user_id, place_in_row: tupleArr[i].place_in_row, name: generatedName, surname: generatedSurname);
+        }
+        string stringBetterTupleArr = Task7PhpPrintBetterTupleArr(betterTuple);
+        string answer = $"""
+                stringBetterTupleArr: {stringBetterTupleArr}
+                """;
+        MyUtils.TaskDisplay("7Php", answer);
+    }
+    private static object[] objectArr = new object[10];
+    private static void Task8Php()
+    {
+
+        for (int i = 0; i < objectArr.Length; i++)
+        {
+            int randomNum = rng.Next(0, 5);
+            if (randomNum == 0) objectArr[i] = rng.Next(0, 11);
+            else objectArr[i] = new int[randomNum].Select(_ => rng.Next(0, 11)).ToArray();
+        }
+        string ans = "[";
+        for (int i = 0; i < objectArr.Length; i++)
+        {
+            try
+            {
+                ans += MyUtils.StringArrayJoin((int[])objectArr[i]);
+            }
+            catch (Exception)
+            {
+                ans += objectArr[i];
+            }
+            if (i < objectArr.Length - 1) ans += ", ";
+        }
+        ans += "]";
+
+        string answer = $"""
+            weirdArray: {ans}
+            """;
+        MyUtils.TaskDisplay("8Php", answer);
+    }
+    private static void Task9Php()
     {
 
     }
